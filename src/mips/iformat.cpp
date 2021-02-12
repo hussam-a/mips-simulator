@@ -1,0 +1,39 @@
+/*
+Part of mips-simulator (github.com/hussam-a/mips-simulator)
+Authors:
+Hussam A. El-Araby (github.com/hussam-a)
+Islam Faisal (github.com/decltypeme)
+Mohamed Hassan (github.com/mh3081995)
+
+Project code and configurations are under the GNU GPL license (mips-simulator/LICENSE) 
+*/
+
+#include "iformat.h"
+#include <stdexcept>
+using namespace std;
+
+iformat::iformat(int _rt, int _rs,  int _immediate, int _instAddress, string _instString)
+	:inst(_instString), instAddress(_instAddress) , rs(_rs), rt(_rt), immediate(_immediate)
+{
+	if (!valid()) throw logic_error("Bad construction of iformat instruction.");
+}
+
+iformat::~iformat() {  }
+
+void iformat::fetch()
+{
+	rsData = readRegister(rs);
+	rtData = readRegister(rt);
+}
+
+void iformat::writeBack()
+{
+	writeRegister(rt, writeData);
+}
+
+bool iformat::valid()
+{
+	return (rs >= 0) && (rs<=31)
+		&& (rt >= 0) && (rt <= 31)
+		&& (instAddress >= 0);
+}
